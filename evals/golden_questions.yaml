@@ -1,0 +1,97 @@
+# Jeu d'évaluation.
+#
+# Chaque cas fournit une requête de référence (`reference_sql`) exécutée par le
+# harnais. La vérité terrain est donc calculée à l'exécution : elle reste juste
+# même si le jeu de données évolue, tant que la graine reste fixe.
+#
+# `tolerance` : écart relatif accepté sur une valeur numérique (0.01 = 1 %).
+# `must_mention` : chaînes qui doivent figurer dans la réponse.
+
+- id: ca_2024
+  question: >-
+    Quel est le chiffre d'affaires hors taxes commandé en 2024 ?
+  reference_sql: >-
+    SELECT ROUND(SUM(amount_untaxed), 2) FROM sale_order
+    WHERE state IN ('sale', 'done') AND date_order LIKE '2024%'
+  tolerance: 0.01
+  requires_sql: true
+  note: Vérifie le filtrage des états sale/done et l'exclusion des devis.
+
+- id: nb_commandes_confirmees
+  question: >-
+    Combien de bons de commande sont confirmés ou clôturés ?
+  reference_sql: >-
+    SELECT COUNT(*) FROM sale_order WHERE state IN ('sale', 'done')
+  tolerance: 0
+  requires_sql: true
+
+- id: top_client
+  question: >-
+    Quel client a généré le plus de chiffre d'affaires hors taxes sur les
+    commandes confirmées ou clôturées ?
+  reference_sql: >-
+    SELECT p.name FROM sale_order o
+    JOIN res_partner p ON p.id = o.partner_id
+    WHERE o.state IN ('sale', 'done')
+    GROUP BY p.id, p.name
+    ORDER BY SUM(o.amount_untaxed) DESC
+    LIMIT 1
+  expect: text
+  requires_sql: true
+
+- id: encours_client
+  question: >-
+    Quel est le montant total des factures clients comptabilisées qui ne sont
+    pas entièrement réglées ?
+  reference_sql: >-
+    SELECT ROUND(SUM(amount_total), 2) FROM account_move
+    WHERE move_type = 'out_invoice' AND state = 'posted'
+      AND payment_state IN ('not_paid', 'partial')
+  tolerance: 0.01
+  requires_sql: true
+  note: Piège sur move_type et payment_state.
+
+- id: stock_interne
+  question: >-
+    Quelle est la quantité totale en stock dans les emplacements internes ?
+  reference_sql: >-
+    SELECT ROUND(SUM(q.quantity), 2) FROM stock_quant q
+    JOIN stock_location l ON l.id = q.location_id
+    WHERE l.usage = 'internal'
+  tolerance: 0.01
+  requires_sql: true
+  note: Piège sur stock_location.usage.
+
+- id: nb_clients
+  question: >-
+    Combien de partenaires sont des clients ?
+  reference_sql: >-
+    SELECT COUNT(*) FROM res_partner WHERE customer_rank > 0
+  tolerance: 0
+  requires_sql: true
+
+- id: produit_marge
+  question: >-
+    Quel produit a la plus forte marge unitaire théorique, c'est-à-dire le plus
+    grand écart entre prix de vente et coût de revient ?
+  reference_sql: >-
+    SELECT name FROM product_template
+    ORDER BY (list_price - standard_price) DESC
+    LIMIT 1
+  expect: text
+  requires_sql: true
+
+- id: hors_perimetre
+  question: >-
+    Quel sera le chiffre d'affaires du trimestre prochain ?
+  expect: refusal
+  requires_sql: false
+  must_mention_any:
+    - "ne peux pas"
+    - "pas de donnée"
+    - "impossible"
+    - "prévision"
+    - "aucune donnée"
+  note: >-
+    Contrôle d'hallucination : la base ne contient aucune projection. L'agent
+    doit refuser plutôt qu'inventer un chiffre.
