@@ -1,4 +1,4 @@
-﻿# odoo-ai-agent
+# odoo-ai-agent
 
 **Un agent IA qui rÃ©pond en franÃ§ais Ã  des questions mÃ©tier sur une base Odoo, sans jamais inventer un chiffre.**
 
@@ -200,6 +200,5 @@ Cinq dÃ©ploiements Odoo Enterprise menÃ©s de bout en bout, 45 utilisateurs f
 ## Licence
 
 MIT â€” voir [LICENSE](LICENSE).
-
 
 

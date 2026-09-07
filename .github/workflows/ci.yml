@@ -1,4 +1,4 @@
-﻿name: CI
+name: CI
 
 on:
   push:
@@ -33,5 +33,4 @@ jobs:
 
       - name: DÃ©monstration hors ligne
         run: python scripts/demo_offline.py
-
 
