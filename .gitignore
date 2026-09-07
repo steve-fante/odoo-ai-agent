@@ -28,3 +28,10 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Cles SSH et certificats - ne doivent jamais entrer dans un depot
+id_*
+*_ed25519
+*_rsa
+*.pem
+*.ppk
