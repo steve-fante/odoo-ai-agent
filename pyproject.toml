@@ -1,0 +1,48 @@
+[project]
+name = "odoo-ai-agent"
+version = "0.1.0"
+description = "Agent IA qui répond à des questions métier sur une base Odoo, avec des outils SQL en lecture seule et une base de connaissance fonctionnelle."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Steve Christian FANTE" }]
+keywords = ["odoo", "erp", "llm", "agent", "langgraph", "rag", "sql", "text-to-sql"]
+
+dependencies = [
+    "langgraph>=0.2",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+anthropic = ["anthropic>=0.40"]
+openai = ["openai>=1.40"]
+postgres = ["psycopg2-binary>=2.9"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.6"]
+
+[project.scripts]
+odoo-ai-agent = "odoo_ai_agent.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]  # la longueur est gérée par le formateur
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+"evals/*" = ["E402"]
+"scripts/*" = ["E402"]

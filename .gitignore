@@ -1,0 +1,30 @@
+# Secrets — ne jamais committer
+.env
+*.key
+
+# Base de démonstration (régénérable via scripts/seed_demo.py)
+data/*.sqlite
+data/*.db
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+metrics.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Éditeurs et systèmes
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
