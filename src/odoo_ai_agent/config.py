@@ -56,7 +56,7 @@ class Settings:
     database_url: str = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB}")
     kb_path: Path = Path(os.getenv("KB_PATH", str(DEFAULT_KB)))
     llm_provider: str = os.getenv("LLM_PROVIDER", "anthropic")
-    llm_model: str = os.getenv("LLM_MODEL", "claude-sonnet-4-5")
+    llm_model: str = os.getenv("LLM_MODEL", "claude-sonnet-5")
     max_rows: int = _int_env("MAX_ROWS", 200)
     query_timeout_s: int = _int_env("QUERY_TIMEOUT_S", 10)
     max_agent_steps: int = _int_env("MAX_AGENT_STEPS", 8)
