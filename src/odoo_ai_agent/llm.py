@@ -42,13 +42,16 @@ class AnthropicClient:
             )
         self._client = anthropic.Anthropic(api_key=key)
         self.model = model
+
+        # `temperature` n'est plus accepté par messages.create() dans les versions
+        # récentes du SDK. Conservé pour la compatibilité de l'interface, non transmis.
         self.temperature = temperature
 
     def chat(self, system, messages, tools):  # noqa: ANN001, ANN201
         response = self._client.messages.create(
             model=self.model,
             max_tokens=2048,
-            temperature=self.temperature,
+           #temperature=self.temperature,
             system=system,
             tools=tools,
             messages=messages,
