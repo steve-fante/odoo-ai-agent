@@ -126,18 +126,27 @@ python evals/run_eval.py --json metrics.json
 
 Format de sortie :
 
+Résultat obtenu avec `claude-sonnet-5`, septembre 2026 :
+
 ```
 [PASS] ca_2024                  ok
 [PASS] nb_commandes_confirmees  ok
-...
+[PASS] top_client               ok
+[PASS] encours_client           ok
+[PASS] stock_interne            ok
+[PASS] nb_clients               ok
+[PASS] produit_marge            ok
+[PASS] hors_perimetre           refus correctement exprimé
+
 --- Métriques ---
 Exactitude        : 8/8 (100%)
 Réponses ancrées  : 7/8
-Étapes moyennes   : 3.4
-Latence moyenne   : 4.1 s
+Étapes moyennes   : 3.12
+Latence moyenne   : 7.69 s
 ```
 
-<!-- TODO : remplacer par les chiffres réellement obtenus, en précisant le modèle. -->
+Les 7/8 réponses ancrées ne sont pas un défaut : le huitième cas est celui où
+l'agent doit refuser de répondre, donc sans exécuter de requête.
 
 Les huit cas couvrent les pièges classiques d'Odoo : filtrage des états de commande,
 distinction `move_type`, et `stock_location.usage` pour le stock réel.
@@ -145,7 +154,7 @@ distinction `move_type`, et `stock_location.usage` pour le stock réel.
 ## Tests
 
 ```bash
-pytest -q          # 61 tests, aucun appel réseau
+pytest -q          # 62 tests, aucun appel réseau
 ruff check .
 ```
 
@@ -187,7 +196,7 @@ src/odoo_ai_agent/
 data/kb/           # règles de gestion Odoo (Markdown)
 evals/             # jeu de questions + harnais de mesure
 scripts/           # génération de la base de démo, démo hors ligne
-tests/             # 61 tests
+tests/             # 62 tests
 ```
 
 ## Auteur
