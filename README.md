@@ -124,8 +124,6 @@ Un agent sans évaluation est une démonstration, pas un produit. Le harnais
 python evals/run_eval.py --json metrics.json
 ```
 
-Format de sortie :
-
 Résultat obtenu avec `claude-sonnet-5`, septembre 2026 :
 
 ```
