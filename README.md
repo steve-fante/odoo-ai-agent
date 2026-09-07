@@ -125,7 +125,6 @@ python evals/run_eval.py --json metrics.json
 ```
 
 Résultat obtenu avec `claude-sonnet-5`, septembre 2026 :
-
 ```
 [PASS] ca_2024                  ok
 [PASS] nb_commandes_confirmees  ok
